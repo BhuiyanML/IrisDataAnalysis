@@ -11,7 +11,7 @@ from modules.network import ConvConvNext, ConvResNet, FCLayerConvNext, FCLayerRe
 
 # Paths
 image_dir = '../Data-For-Segmentation/images/'
-mask_dir = '../Data-For-Segmentation/OURS/'
+mask_dir = '../Data-For-Segmentation/masks/'
 model_name = 'resnet'  # convnext
 
 if model_name.lower() == 'convnext':
@@ -61,10 +61,6 @@ for filename in filenames:
     # Load and preprocess mask
     mask = Image.open(mask_path).convert('L')
     mask_array = np.array(mask).astype(float)
-
-    # Convert mask_array to binary (0 or 1)
-    threshold = 128
-    binary_mask = np.where(mask_array > threshold, 255, 0).astype(np.uint8)  # Convert to binary
 
     # Disable gradient computation
     with torch.no_grad():
