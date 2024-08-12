@@ -1,1 +1,1 @@
-# Iris Biometric Data Analysis: Segmentation, Visualization, and Evaluation
+# Iris Biometric Segmentation, Visualization, and Evaluation
