@@ -6,9 +6,9 @@ from torchvision import transforms
 from modules.network import NestedSharedAtrousResUNet
 
 # Define paths and directories
-image_dir = "/Users/raselahmedbhuiyan/Documents/New-born-Iris-Segmentation/Data-For-Segmentation/images/"
+image_dir = "./input_images/"
 seg_model_path = "./models/nestedsharedatrousresunet-025-0.133979-maskIoU-0.891476.pth"
-output_dir = "/Users/raselahmedbhuiyan/Documents/New-born-Iris-Segmentation/Data-For-Segmentation/OURS/"
+output_dir = "./results/"
 
 # Get a list of image files
 files = glob.glob(os.path.join(image_dir, "*"))
