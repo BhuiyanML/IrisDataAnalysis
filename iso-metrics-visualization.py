@@ -108,7 +108,7 @@ def create_probability_histogram(data, column, figName):
 
 # Directories and class list
 input_dir = './matching-scores-final/iso-scores/'
-output_dir = './figures-final/iso-metrics/'
+output_dir = './figures/'
 
 data_list = []
 # Read pairs of dataframes
