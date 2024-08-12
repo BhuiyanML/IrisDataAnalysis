@@ -1,5 +1,5 @@
 Download the models from:
 
-https://notredame.box.com/s/vxwwtm68th0nvdag6dhqn7u64kf2i2r0
+https://drive.google.com/drive/folders/1foUp7T71Z0iYr2UF-Pg50bsXEdx7RQVa?usp=sharing
 
 and put them into this folder.
