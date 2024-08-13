@@ -10,73 +10,7 @@ from torchvision import models
 from torch.autograd import Variable
 from torch.utils.data import Dataset
 from torchvision.transforms import ToTensor
-
-
-class FCLayer(nn.Module):
-    """
-    Fully connected layer module.
-
-    Args:
-    - in_h (int): Input height.
-    - in_w (int): Input width.
-    - out_n (int): Number of output neurons.
-    """
-    def __init__(self, in_h=8, in_w=10, out_n=6):
-        super().__init__()
-        self.in_h = in_h
-        self.in_w = in_w
-        self.out_n = out_n
-        # Create a list of linear layers
-        self.fc_list = nn.ModuleList([nn.Linear(in_h * in_w, 1) for _ in range(out_n)])
-
-    def forward(self, x):
-        """
-        Forward pass of the fully connected layer module.
-
-        Args:
-        - x (torch.Tensor): Input tensor.
-
-        Returns:
-        - out (torch.Tensor): Output tensor.
-        """
-        # Reshape the input tensor
-        x = x.reshape(-1, self.out_n, self.in_h, self.in_w)
-        outs = []
-        # Iterate over each output neuron
-        for i in range(self.out_n):
-            # Apply linear transformation
-            outs.append(self.fc_list[i](x[:, i, :, :].reshape(-1, self.in_h * self.in_w)))
-        # Concatenate the outputs
-        out = torch.cat(outs, 1)
-        return out
-
-
-class Conv(nn.Module):
-    """
-    Convolutional layer module.
-
-    Args:
-    - in_channels (int): Number of input channels.
-    - out_n (int): Number of output channels.
-    """
-    def __init__(self, in_channels=512, out_n=6):
-        super().__init__()
-        # Define the convolutional layer
-        self.conv = nn.Conv2d(in_channels, out_n, kernel_size=1, stride=1, padding=0)
-
-    def forward(self, x):
-        """
-        Forward pass of the convolutional layer module.
-
-        Args:
-        - x (torch.Tensor): Input tensor.
-
-        Returns:
-        - x (torch.Tensor): Output tensor.
-        """
-        # Apply convolution
-        x = self.conv(x)
-        return x
+from .network import ConvConvNext, FCLayerConvNext
 
 
 def random_rotation(image, image_type, rotation_angle):
@@ -131,8 +65,8 @@ def find_pupil_circle_using_convnext(circle_model_path, image, input_transform, 
 
     # Load ConvNet model
     circle_model = models.convnext_tiny()
-    circle_model.avgpool = Conv(in_channels=768, out_n=6)
-    circle_model.classifier = FCLayer(in_h=7, in_w=10, out_n=6)
+    circle_model.avgpool = ConvConvNext(in_channels=768, out_n=6)
+    circle_model.classifier = FCLayerConvNext(in_h=7, in_w=10, out_n=6)
 
     try:
         # Load model weights from file
@@ -153,10 +87,10 @@ def find_pupil_circle_using_convnext(circle_model_path, image, input_transform, 
 
     # Circle parameters
     diag = math.sqrt(w ** 2 + h ** 2)
-    inp_xyr = inp_xyr_t.tolist()[0]  # Convert tensor to list
+    inp_xyr = inp_xyr_t.tolist()[0]
     pupil_x = (inp_xyr[0] * w)
     pupil_y = (inp_xyr[1] * h)
-    pupil_r = (inp_xyr[2] * 0.5 * 0.8 * diag)  # Adjusting radius based on image diagonal
+    pupil_r = (inp_xyr[2] * 0.5 * 0.8 * diag)
     # iris_x = (inp_xyr[3] * w)
     # iris_y = (inp_xyr[4] * h)
     # iris_r = (inp_xyr[5] * 0.5 * diag)
